@@ -1,5 +1,5 @@
-parameter despeed is 5.
 parameter deshead is 0.
+parameter despeed is 5.
 parameter max_error is 1.
 
 main().
@@ -94,6 +94,25 @@ function printinfo {
     print "press q to quit.".
 }
 
+function pitch_for {
+	parameter ves is ship.
+	local pointing is ves:facing:forevector.
+	return 90 - vang(ves:up:vector,pointing).
+}
+
+function roll_for {
+	parameter ves is ship.
+	local pointing is ves:facing.
+	local trig_x is vdot(pointing:topvector, ves:up:vector).
+	if abs(trig_x) < 0.0035 {
+		return 0.
+	} else {
+		local vec_y is vcrs(ves:up:vector, pointing:forevector).
+		local trig_y is vdot(pointing:topvector, vec_y).
+		return arctan2(trig_y, trig_x).
+	}
+}
+
 function test_finished {
 	if terminal:input:haschar {
 		set c to terminal:input:getchar().
@@ -154,6 +173,11 @@ function test_finished {
             return true.
         }
     }
+	if (pitch_for() < -10) or (abs(roll_for()) > 10) {
+		print pitch_for().
+		print roll_for().
+		return true.
+	}
 	return False.
 }
 

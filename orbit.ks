@@ -1,7 +1,29 @@
 parameter desiredapo.
-parameter pitchingairspeed is 45.
 parameter inc is 0.
+
+parameter peri is "none".
+parameter pitchingairspeed is 45.
+
 set desiredapo to desiredapo * 1000.
+if body:atm:exists {
+	if desiredapo < body:atm:height {
+		set desiredapo to body:atm:height + 1000.
+	}
+}
+
+if not (peri = "none") {
+	set peri to peri*1000.
+	if peri < 0 {
+		set peri to desiredapo.
+	}
+	if body:atm:exists {
+		if peri < body:atm:height {
+			set peri to body:atm:height + 1000.
+		}
+	}
+} else {
+	set peri to desiredapo.
+}
 
 set pitchangle to 5.
 set timetoapo to 30.
@@ -14,6 +36,17 @@ function main {
 	clearscreen.
 	countdown().
 
+	when eta:apoapsis > 25 then {
+		when eta:apoapsis < 25 then {
+			list engines in engs.
+			for eng in engs {
+				if eng:ignition {
+					set eng:thrustlimit to 100.
+				}
+			}
+		}
+	}
+
 	on abort {
 		return 1/0.
 	}
@@ -24,36 +57,49 @@ function main {
 		ascention().
 		circularization().
 	}
-	if abs(apoapsis - desiredapo) < 1000 and abs(periapsis - desiredapo) < 1000 {
+	if abs(apoapsis - desiredapo) < 1000 and abs(periapsis - peri) < 1000 {
 		save_alt_pitchingairspeed().
 	}
 }
 
 function save_alt_pitchingairspeed {
 	set alt_pitches_path to "archive:/boot/alt_pitches.json".
+	if addons:available("RT") {
+		set remoteTech to addons:RT.
+		if not remoteTech:haskscconnection(ship) {
+			// need to warp to where the ksc is...
+			print "warping one minute at a time until KSC connection is found.".
+			until remoteTech:haskscconnection(ship) {
+				kuniverse:timewarp:warpto(time:seconds + 60).
+				wait until kuniverse:timewarp:issettled.
+				wait until kuniverse:timewarp:rate = 1.
+				wait until kuniverse:timewarp:issettled.
+			}
+		}
+	}
 	print "in save_apas".
-	wait 1.
+	// wait 1.
 	if exists(alt_pitches_path) {
 		print "  path found".
-		wait 1.
+		// wait 1.
 		set l to readJson(alt_pitches_path).
 		if l:haskey(ship:name) {
 			print "   " + ship:name + " found in lexicon".
-			wait 1.
-			set l[ship:name] to "run orbit("+desiredapo+","+pitchingairspeed+","+inc+").".
+			// wait 1.
+			set l[ship:name] to "run orbit("+desiredapo/1000+","+inc+","+peri+","+pitchingairspeed+").".
 		} else {
 			print "   " + ship:name + " not found in lexicon".
-			wait 1.
+			// wait 1.
 			print "   adding to lexicon...".
-			wait 1.
-			l:add(ship:name,"run orbit("+desiredapo/1000+","+pitchingairspeed+","+inc+").").
+			// wait 1.
+			l:add(ship:name,"run orbit("+desiredapo/1000+","+inc+","+peri+","+pitchingairspeed+").").
 		}
 		print "  saving lexicon...".
-		wait 1.
+		// wait 1.
 		writeJson(l,alt_pitches_path).
 	} else {
 		print "  path not found. creating lexicon.".
-		wait 1.
+		// wait 1.
 		set l to lexicon().
 		l:add(ship:name,pitchingairspeed).
 		writeJson(l,alt_pitches_path).
@@ -89,6 +135,9 @@ function azimuth {
     local parameter inclination.
     parameter orbit_alt.
     parameter auto_switch is false.
+	if orbit_alt > 100000 {
+		set orbit_alt to 100000.
+	}
 
     local shipLat is ship:latitude.
     if abs(inclination) < abs(shipLat) {
@@ -141,33 +190,6 @@ function liftoff {
 	return true.
 }
 
-
-// unused
-// function angle {
-// 	// print arctan((desiredapo - altitude)/100000).
-// 	return 1.432*10^(-25)*(altitude^6) - 2.549*10^(-20)*(altitude^5) + 1.725*10^(-15)*(altitude^4) - 5.840*10^(-11)*(altitude^3) + 1.083*10^(-6)*(altitude^2) - 1.149*10^(-2)*(altitude) + 9.680*10.
-// }
-
-// unused
-// function get_weight {
-// 	return body:mu*ship:mass/((altitude + body:radius)^2).
-// }
-
-// unused
-// function control_throttle {
-// 	// calculates the desired throttle level for each stage of the ascenct.
-// 	// until apoapsis is greater than 45 sec away, it is 1.
-// 	// from there, we want to keep it just under a minute away (~45 sec)
-// 	// once apoapsis reaches it's desired height, this function is never called again
-// 	if eta:apoapsis < 45 {
-// 		return 1.
-// 	} else if eta:apoapsis > 60 {
-// 		return 0.01.
-// 	} else {
-// 		return (-.99/15)*(eta:apoapsis - 60) + 0.01.
-// 	}
-// }
-
 function east_for{
 	parameter ves is ship.
 	return vcrs(ves:up:vector, ves:north:vector).
@@ -205,19 +227,6 @@ function roll_for {
 		return arctan2(trig_y, trig_x).
 	}
 }
-
-// unused
-// function get_heading {
-// 	set head to 90 - inclination.
-// 	if ship:dynamicpressure = 0 {
-// 		if inclination > 0 {
-// 			set head to head - (abs(inclination) - orbit:inclination).
-// 		} else {
-// 			set head to head + (abs(inclination) - orbit:inclination).
-// 		}
-// 	}
-// 	return head.
-// }
 
 function heading_bug {
 	set prg_delta to 0.
@@ -358,12 +367,21 @@ function needstage {
 			// }
 			wait until stage:ready.
 			check_eng_failure().
+			until stage:deltav:current > 0 {
+				wait until stage:ready.
+				stage.
+			}
+			print "actual current twr: " + currtwr.
 			limit_twr(currtwr*1.01).
 			return.
 		}
 	}
+	local currthrust to get_curr_thrust().
+	if (currthrust < 0.001) or (stage:deltav:current < 10) {return.}
 	local weight to ship:mass*ship:body:mu/((ship:body:radius + ship:altitude)^2).
-	set currtwr to get_curr_thrust()/weight.
+	set currtwr to currthrust/weight.
+	clearscreen.
+	print "current twr: " + currtwr.
 }
 
 function check_eng_failure {
@@ -405,8 +423,13 @@ function circ_apo {
     set circnode to node(timespan(apo_time), 0 ,0, 0).
 	set r1 to periapsis + body:radius.
 	set r2 to apoapsis + body:radius.
-	set circnode:prograde to sqrt(body:mu/r2)*(1-sqrt(2*r1/(r1+r2))).
-    add circnode.
+	if not (peri = "none") {
+		set r3 to peri+body:radius.
+		set circnode:prograde to sqrt(body:mu/r2)*(1-sqrt(2*r1/(r1+r2))) - sqrt(body:mu/r2)*(1-sqrt(2*r3/(r3+r2))). // needs to include the desired periapsis
+	} else { 
+		set circnode:prograde to sqrt(body:mu/r2)*(1-sqrt(2*r1/(r1+r2))).
+	}
+	add circnode.
 }
 
 function circularization {
@@ -429,134 +452,33 @@ function circularization {
 	wait 1.
 	print "beginning circularization.".
 	set nodedv to nextNode:burnvector:mag.
-	until stage:deltav:current > nodedv/10 or stage:number = 0 {
-		wait until stage:ready.
-		stage.
+	// until stage:deltav:current > nodedv/10 or stage:number = 0 {
+	// 	wait until stage:ready.
+	// 	stage.
+	// }
+	if stage:deltav:current < nodedv {
+		print "current stage cannot perform maneuver".
+		set n to stage:number-1.
+		print "checking stage " + n.
+		until ship:stagedeltav(n):current > 0  or n = 0 {
+			print "stage " + n + "has 0 dv".
+			set n to n - 1.
+			print "checking stage " + n.
+		}
+		if ship:stagedeltav(n):current > 0 {
+			print "stage " + n + "has positive dv".
+		} else {
+			print "stage 0 reached with 0 dv".
+		}
+		if ship:stagedeltav(n):current >= nodedv {
+			stage.
+			until stage:deltav:current > 0 {
+				wait until stage:ready.
+				stage.
+			}
+		} else {
+			print "next stage with positive dv cannot perform burn".
+		}
 	}
-	runPath("reaper.ks","w").
+	runPath("reaper","w").
 }
-
-// function reaper {
-// 	if not hasnode {
-// 		print "this vessel has no node to execute.".
-// 		return.
-// 	}
-// 	sas off.
-// 	set mynode to nextnode.
-// 	set burn_time to calculate_burn_time().
-// 	until stage:deltav:current >= mynode:deltav:mag or stage:number = 0{
-// 		wait until stage:ready.
-// 		stage.
-// 	}
-// 	if stage:deltav:current < mynode:deltav:mag {
-// 		print "cannot perform maneuver on current stage".
-// 		print "you'll have to control the throttle yourself".
-// 		print "we will stage for you, as well as stop the throttle.".
-// 		node_assist().
-// 		return.
-// 	} else {
-// 		print "burn time: " + burn_time.
-// 	}
-// 	lock steering to mynode:deltav.
-// 	print "steering to burn vector".
-// 	wait until vang(ship:facing:vector, mynode:deltav) < 1.
-// 	kuniverse:timewarp:warpto(mynode:time - 300 - burn_time/2).
-// 	wait until kuniverse:timewarp:rate = 1.
-// 	wait until kuniverse:timewarp:issettled.
-// 	wait until vang(ship:facing:vector, mynode:deltav) < 1.
-
-// 	kuniverse:timewarp:warpto(mynode:time - 60 - burn_time/2).
-// 	wait until kuniverse:timewarp:rate = 1.
-// 	wait until kuniverse:timewarp:issettled.
-// 	wait until vang(ship:facing:vector, mynode:deltav) < 1.
-
-// 	kuniverse:timewarp:warpto(mynode:time - 10 - burn_time/2).
-// 	wait until kuniverse:timewarp:rate = 1.
-// 	wait until kuniverse:timewarp:issettled.
-// 	wait until vang(ship:facing:vector, mynode:deltav) < 1.
-// 	execute().
-// 	sas on.
-// }
-
-// function get_stage_ISP {
-// 	list engines in engs.
-// 	local numer is 0.
-// 	local denom is 0.
-// 	for eng in engs {
-// 		if eng:ignition {
-// 			set numer to numer + eng:availablethrust.
-// 			set denom to denom + eng:availablethrust/eng:isp.
-// 		}
-// 	}
-// 	return numer/denom.
-// }
-
-// function get_stage_thrust {
-// 	list engines in engs.
-// 	local force is 0.
-// 	for eng in engs {
-// 		if eng:ignition {
-// 			set force to force + eng:availablethrust.
-// 		}
-// 	}
-// 	return force.
-// }
-
-// function calculate_burn_time {
-// 	local mynodedv is mynode:deltav:mag.
-// 	local g is constant():g0.
-// 	local m0 is ship:mass.
-// 	local F is get_stage_thrust().
-// 	local Isp is get_stage_ISP().
-// 	local e is constant():e.
-
-// 	return (g*m0*Isp/F) * (1 - e^(-mynodedv/(g*Isp))).
-
-
-
-// }
-
-// function execute {
-// 	wait until time:seconds > mynode:time - burn_time/2 - 30.
-// 	print "burn in 30 sec".
-// 	wait until time:seconds > mynode:time - burn_time/2 - 10.
-// 	print "burn in 10 sec".
-// 	wait until time:seconds > mynode:time - burn_time/2 - 5.
-// 	print "5...".
-// 	wait until time:seconds > mynode:time - burn_time/2 - 4.
-// 	print "4...".
-// 	wait until time:seconds > mynode:time - burn_time/2 - 3.
-// 	print "3...".
-// 	wait until time:seconds > mynode:time - burn_time/2 - 2.
-// 	print "2...".
-// 	wait until time:seconds > mynode:time - burn_time/2 - 1.
-// 	print "1...".
-// 	set burnvec to mynode:deltav:vec.
-// 	wait until time:seconds > mynode:time - burn_time/2.
-// 	print "burn!".
-// 	lock throttle to 1.
-// 	wait until mynode:deltav:mag < 10.
-// 	print "reducing throttle".
-// 	lock throttle to mynode:deltav:mag/10+0.05.
-// 	wait until vang(burnvec, mynode:deltav:vec) > 5.
-// 	lock throttle to 0.
-// 	set ship:control:pilotmainthrottle to 0.
-// 	unlock all.
-// }
-
-// function node_assist {
-// 	unlock throttle.
-// 	lock steering to mynode:deltav.
-// 	set burnvec to mynode:deltav:vec.
-// 	until mynode:deltav:mag < 10 {
-// 		needstage().
-// 		wait 0.001.
-// 	}
-// 	lock throttle to mynode:deltav:mag/10 + .001.
-// 	until vang(burnvec,mynode:deltav) > 5 {
-// 		needstage.
-// 		wait 0.001.
-// 	}
-// 	lock throttle to 0.
-// 	set ship:control:pilotmainthrottle to 0.
-// }

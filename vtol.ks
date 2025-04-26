@@ -57,7 +57,7 @@ function main {
     lock throttle to throt.
     wait until alt:radar > 10 and ship:status = "flying".
     set start to time:seconds.
-    until not ship:status = "flying" {
+    until not (ship:status = "flying") {
         if time:seconds - start > 1{
             set start to time:seconds.
             clearScreen.

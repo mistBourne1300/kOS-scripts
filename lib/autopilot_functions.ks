@@ -275,7 +275,8 @@ function printinfo {
 	print "heading: " + deshead.
 	print "alt: " + vspid:setpoint.
 	print "speed: " + throtpid:setpoint.
-	print "vsmax: " + vsmax.
+	print "vsmax: " + vspid:maxoutput.
+	print "vsmin: " + vspid:minoutput.
 	print "vs: " + vspid:output.
 	print "pitchang: " + pitchang:output.
 	print "pitch: " + pitchcontrol:output.
@@ -572,7 +573,8 @@ function update_loops {
 	// or we start to get some weird oscillations
 	set vspid:kd to min(2,abs(vspid:error)/25) + 1.
 	// get desired vertical speed
-	set vspid:maxoutput to min(airspeed/3,vsmax).
+	set vspid:maxoutput to min(airspeed/10,vsmax).
+	set vspid:minoutput to max(-airspeed/5,-vsmax).
 	set vertupdate to vspid:update(time:seconds, altitude).
 	// this pitch angle only handles how much to adjust the pitch angle. 
 	// i.e. the  arcSin(vertupdate/airspeed) below handles what angle to go to
@@ -582,7 +584,7 @@ function update_loops {
 	if abs(airspeed) >= abs(vertupdate) {
 		// if the airspeed is less than the vertical update, arcsin will throw an error.
 		// additionally, we don't want to have an angle larger than 25 (arbitrarily chosen)
-		set angle to min(angle + arcSin(vertupdate/airspeed),25).
+		set angle to min(angle + arcSin(vertupdate/airspeed) + 1 - 1/cos(rollcontrol:setpoint),25).
 	} else {
 		if vertupdate < 0{
 			set angle to angle - 15.
@@ -594,7 +596,8 @@ function update_loops {
 	// get the desired pitch angle and update the plane's pitch control accordingly.
 	set pitchcontrol:setpoint to angle.
 	set ship:control:pitch to pitchcontrol:update(time:seconds, curpitch).
-	if ship:control:pitch > 0 {
+	local temp to ship:control:pitch. // for some reason, the pitch control wasn't being updated, so I added a line that forces it to update.
+	if aoa > -0.1 {
 		// banking maneuver, with a maximum bank angle of 55.
 		// this maximum angle can be changed, but the -(55/15) constant
 		// will probably need to be changed as well...

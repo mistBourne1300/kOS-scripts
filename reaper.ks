@@ -18,15 +18,17 @@ function reaper_main {
 	}
 	set mynode to nextnode.
 	set burn_time to calculate_burn_time().
+	set start_burn_at to 0.
 	if stage:deltav:current < mynode:deltav:mag {
 		print "cannot perform maneuver on current stage".
 		print "you'll have to control the throttle yourself".
 		print "we will stage for you, as well as stop the throttle.".
-		print "burn time: " + burn_time.
+		print "burn time: ~" + burn_time.
 		node_assist().
 		return.
 	} else {
 		print "burn time: " + burn_time.
+
 	}
 	
 	if dowarp = "w" {

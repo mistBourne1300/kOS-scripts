@@ -1,47 +1,7 @@
 {
     "entries": [
         {
-            "value": "temp LF Refueller",
-            "$type": "kOS.Safe.Encapsulation.StringValue"
-        },
-        {
-            "value": 55,
-            "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
-        },
-        {
-            "value": "MagnetoBEEP",
-            "$type": "kOS.Safe.Encapsulation.StringValue"
-        },
-        {
-            "value": 30,
-            "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
-        },
-        {
-            "value": "Mun w Extended Stay",
-            "$type": "kOS.Safe.Encapsulation.StringValue"
-        },
-        {
-            "value": 35,
-            "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
-        },
-        {
-            "value": "RCS Skimmer",
-            "$type": "kOS.Safe.Encapsulation.StringValue"
-        },
-        {
-            "value": 40,
-            "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
-        },
-        {
-            "value": "LKO Transport",
-            "$type": "kOS.Safe.Encapsulation.StringValue"
-        },
-        {
-            "value": "run orbit(80000,45,0).",
-            "$type": "kOS.Safe.Encapsulation.StringValue"
-        },
-        {
-            "value": "X03 - B.A.R.B.S.",
+            "value": "First Orbit",
             "$type": "kOS.Safe.Encapsulation.StringValue"
         },
         {
@@ -49,15 +9,7 @@
             "$type": "kOS.Safe.Encapsulation.StringValue"
         },
         {
-            "value": "LKO Shuttle",
-            "$type": "kOS.Safe.Encapsulation.StringValue"
-        },
-        {
-            "value": "run orbit(80000,45,0).",
-            "$type": "kOS.Safe.Encapsulation.StringValue"
-        },
-        {
-            "value": "Manned Mun Flyby",
+            "value": "Stayputnik 1",
             "$type": "kOS.Safe.Encapsulation.StringValue"
         },
         {
@@ -65,27 +17,11 @@
             "$type": "kOS.Safe.Encapsulation.StringValue"
         },
         {
-            "value": "Fredble's Manned Mun Flyby (with lvl 3 pilot for vis obs)",
+            "value": "ScanSat1",
             "$type": "kOS.Safe.Encapsulation.StringValue"
         },
         {
-            "value": "run orbit(80,45,0).",
-            "$type": "kOS.Safe.Encapsulation.StringValue"
-        },
-        {
-            "value": "Kerbin Station Airlock and Docking Module",
-            "$type": "kOS.Safe.Encapsulation.StringValue"
-        },
-        {
-            "value": "run orbit(80,45,0).",
-            "$type": "kOS.Safe.Encapsulation.StringValue"
-        },
-        {
-            "value": "Station Habitation Module and Nitrogen Refill",
-            "$type": "kOS.Safe.Encapsulation.StringValue"
-        },
-        {
-            "value": "run orbit(80,45,0).",
+            "value": "run orbit(80,90,80000,45).",
             "$type": "kOS.Safe.Encapsulation.StringValue"
         }
     ],

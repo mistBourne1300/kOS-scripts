@@ -43,11 +43,13 @@ function warptonext {
 		kuniverse:timewarp:warpto(time:seconds + eta:apoapsis - 60).
 		wait until kuniverse:timewarp:issettled.
 		wait until kuniverse:timewarp:warp = 0.
+		wait until kuniverse:timewarp:issettled.
 	} else {
 		// warp to periapsis
 		kuniverse:timewarp:warpto(time:seconds + eta:periapsis - 60).
 		wait until kuniverse:timewarp:issettled.
 		wait until kuniverse:timewarp:warp = 0.
+		wait until kuniverse:timewarp:issettled.
 	}
 }
 

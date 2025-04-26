@@ -5,7 +5,7 @@ parameter uservsmax is 100.
 
 set km to 1000.
 
-runOncePath("0:/lib/autopilot_functions.ks",userhead, useralt, userairspd, uservsmax).
+runOncePath("0:/lib/autopilot_functions",userhead, useralt, userairspd, uservsmax).
 
 main().
 

@@ -5,6 +5,7 @@ if kuniverse:activevessel = ship {
 }
 
 set p to "archive:/boot/alt_pitches.json".
+copypath("0:reaper","reaper").
 
 if exists(p) {
     print "path found.".wait .1.
