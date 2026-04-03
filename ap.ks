@@ -4,8 +4,12 @@ parameter userairspd is 200.
 parameter uservsmax is 100.
 
 set km to 1000.
+if exists("lib/autopilot_functions.ks") {
+    runOncePath("lib/autopilot_functions",userhead, useralt, userairspd, uservsmax).
+} else {
+    runOncePath("0:/lib/autopilot_functions",userhead, useralt, userairspd, uservsmax).
+}
 
-runOncePath("0:/lib/autopilot_functions",userhead, useralt, userairspd, uservsmax).
 
 main().
 

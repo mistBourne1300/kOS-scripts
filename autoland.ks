@@ -17,7 +17,10 @@ set waypoint_alt to 0.
 set landdesalt to 7000.
 set landdesairspd to stallspeed*3.
 
-
+set userhead to ship:heading.
+set useralt to ship:altitude.
+set userairspd to ship:airspeed.
+set uservsmax to 100. 
 
 
 set km to 1000.
@@ -25,7 +28,11 @@ set km to 1000.
 set starttime to time:seconds.
 
 set valid_runways to list("KSC", "Dessert Airfield").
-runOncePath("0:/lib/autopilot_functions.ks").
+if exists("lib/autopilot_functions.ks") {
+    runOncePath("lib/autopilot_functions",userhead, useralt, userairspd, uservsmax).
+} else {
+    runOncePath("0:/lib/autopilot_functions",userhead, useralt, userairspd, uservsmax).
+}
 
 function autoland_main {
     clearScreen.
@@ -37,13 +44,14 @@ function autoland_main {
     //     set ship:control:neutralize to true.
     //     return.
     // }
-    select_landing().
+    
     sas off.
     set throtpid:setpoint to max(landdesairspd,airspeed).
 
     lock groundalt to altitude - alt:radar.
     set landdesalt to max(ship:altitude,groundalt + 1000).
     set vspid:setpoint to landdesalt.
+    select_landing().
 
     until waypoint_dist() < 100*km {
         // if test_flameout() {
@@ -81,11 +89,21 @@ function autoland_main {
         wait 0.001.
     }
     brakes off.
+    if kuniverse:canquicksave {
+        sas on.
+        kuniverse:quicksave().
+        sas off.
+    } else {
+        clearscreen.
+        print "quicksaving failed.".
+        print "pausing game for human decision.".
+        kuniverse:pause().
+    }
 
     set landdesairspd to stallspeed + 100.
     set throtpid:setpoint to landdesairspd.
 
-    when altitude < 7000 then {
+    when altitude < 10000 then {
         set approach_time to waypoint_dist()/max(throtpid:setpoint*1.1,airspeed).
 
         set vspid:minoutput to -(altitude)/approach_time.
@@ -109,17 +127,6 @@ function autoland_main {
     // }
 
     when (altitude - landdesalt < 1000 and pitch_for() > 0) then {
-
-        if kuniverse:canquicksave {
-            sas on.
-            kuniverse:quicksave().
-            sas off.
-        } else {
-            clearscreen.
-            print "quicksaving failed.".
-            print "pausing game for human decision.".
-            kuniverse:pause().
-        }
         brakes off.
         lights off.
         sas on.
@@ -129,6 +136,78 @@ function autoland_main {
         wait 0.5.
         toggle ag3.
         sas off.
+    }
+
+    // reset pid loop structure to landing settings
+
+    if exists(pid_setting_path) {
+        set lx to readJson(pid_setting_path).
+        if lx:haskey(ship:name + " landing") {
+            set landing_lex to lx[ship:name + " landing"].
+        } else {
+            set ship_lex to "default landing".
+            lx:add(ship:name+" landing",ship_lex).
+			writeJson(lx,pid_setting_path).
+        }
+        set throtkp to ship_lex["throtkp"].
+		set throtki to ship_lex["throtki"].
+		set throtkd to ship_lex["throtkd"].
+
+		set vskp to ship_lex["vskp"].
+		set vski to ship_lex["vski"].
+		set vskd to ship_lex["vskd"].
+
+		set pitchangkp to ship_lex["pitchangkp"].
+		set pitchangki to ship_lex["pitchangki"].
+		set pitchangkd to ship_lex["pitchangkd"].
+
+		set rollkp to ship_lex["rollkp"].
+		set rollki to ship_lex["rollki"].
+		set rollki to ship_lex["rollki"].
+
+		set pitchkp to ship_lex["pitchkp"].
+		set pitchki to ship_lex["pitchki"].
+		set pitchkd to ship_lex["pitchkd"].
+
+		set yawkp to ship_lex["yawkp"].
+		set yawki to ship_lex["yawki"].
+		set yawkd to ship_lex["yawkd"].
+
+		set sideslipkp to ship_lex["sideslipkp"].
+		set sideslipki to ship_lex["sideslipki"].
+		set sideslipkd to ship_lex["sideslipkd"].
+
+        set minthrot to 0.0.
+        set maxthrot to 1.0.
+        set throtpid to pidloop(throtkp, throtki, throtkd, minthrot, maxthrot).
+        set throtpid:setpoint to landdesairspd.
+        set throt to 0.0.
+        lock throttle to throt.
+
+        set vspid to pidloop(vskp,vski,vskd,-100,100).
+        set vspid:setpoint to landdesalt.
+
+        set minpitchang to -3.
+        set maxpitchang to 10.
+        set pitchang to pidloop(pitchangkp, pitchangki, pitchangkd, minpitchang, maxpitchang).
+        set pitchang:setpoint to 0.
+
+        set minroll to -1.
+        set maxroll to 1.
+        set rollcontrol to pidloop(rollkp, rollki, rollkd, minroll, maxroll).
+        set rollcontrol:setpoint to 0.
+
+        set minpitch to -0.5.
+        set maxpitch to 1.
+        set pitchcontrol to pidloop(pitchkp, pitchki, pitchkd, minpitch, maxpitch).
+
+        set minyaw to -1.
+        set maxyaw to 1.
+        set yawcontrol to pidloop(yawkp, yawki, yawkd, minyaw, maxyaw).
+        set yawtakeover to 3.
+
+        set sideslipcontrol to pidloop(sideslipkp, sideslipki, sideslipkd, minyaw, maxyaw).
+
     }
 
     until waypoint_dist() < 20*km {
@@ -228,8 +307,28 @@ function autoland_main {
     // set startdecay to time:seconds.
     // set startout to vspid:maxoutput.
     // set decayexp to .9.
+    set loop_start_time to time:seconds.
+    set loop_total_time to 5.
+    set starting_desalt to landdesalt.
+    set ending_desalt to waypoint_alt.
+    set m to (ending_desalt-starting_desalt)/loop_total_time.
+    lock landdesalt to m*(time:seconds - loop_start_time) + starting_desalt.
+    until ship:status = "landed" or time:seconds - loop_start_time > loop_total_time {
+        set vspid:setpoint to landdesalt.
+        loop_internals().
+        if test_flameout() {
+            go_around().
+        }
+        if airspeed > landdesairspd*1.1 and alt:radar > 5{
+            brakes on.
+        } else {
+            brakes off.
+        }
+        wait 0.001.
+    }
+    lock landdesalt to waypoint_alt.
     until ship:status = "landed" {
-        set vspid:maxoutput to verticalSpeed^2.
+        set vspid:maxoutput to verticalSpeed^2 - 1.
         loop_internals().
         if test_flameout() {
             go_around().
@@ -309,7 +408,7 @@ function loop_internals {
         return 1/0.
     }
     update_loops().
-    if time:seconds - starttime > 1 {
+    if time:seconds - starttime > 0 {
         set is_valid to select_landing().
         if is_valid {
             printinfo().

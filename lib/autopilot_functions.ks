@@ -5,18 +5,147 @@ parameter vsmax is 100.
 
 set km to 1000.
 
+set pid_setting_path to "0:lib/pid_loop_settings.json".
+
 initialize().
 
 function initialize {
 	// this takes a lot of computing power...
 	set config:ipu to 1000.
 
-    list engines in engs. // is used to check whether an engine has flamed out
+	list engines in engs. // is used to check whether an engine has flamed out
 
-    // initialize throttle pid
-	set throtkp to 0.1.
-	set throtki to 0.01.
-	set throtkd to 0.1.
+	if exists(pid_setting_path) {
+		set lx to readJson(pid_setting_path).
+		if lx:haskey(ship:name){
+			set ship_lex to lx[ship:name].
+		} else {
+			set ship_lex to lx["default"].
+			lx:add(ship:name,ship_lex).
+			lx:add(ship:name+" landing",ship_lex).
+			writeJson(lx,pid_setting_path).
+		}
+		set throtkp to ship_lex["throtkp"].
+		set throtki to ship_lex["throtki"].
+		set throtkd to ship_lex["throtkd"].
+
+		set vskp to ship_lex["vskp"].
+		set vski to ship_lex["vski"].
+		set vskd to ship_lex["vskd"].
+
+		set pitchangkp to ship_lex["pitchangkp"].
+		set pitchangki to ship_lex["pitchangki"].
+		set pitchangkd to ship_lex["pitchangkd"].
+
+		set rollkp to ship_lex["rollkp"].
+		set rollki to ship_lex["rollki"].
+		set rollkd to ship_lex["rollkd"].
+
+		set pitchkp to ship_lex["pitchkp"].
+		set pitchki to ship_lex["pitchki"].
+		set pitchkd to ship_lex["pitchkd"].
+
+		set yawkp to ship_lex["yawkp"].
+		set yawki to ship_lex["yawki"].
+		set yawkd to ship_lex["yawkd"].
+
+		set sideslipkp to ship_lex["sideslipkp"].
+		set sideslipki to ship_lex["sideslipki"].
+		set sideslipkd to ship_lex["sideslipkd"].
+	} else {
+
+		
+
+		// initialize throttle pid
+		set throtkp to 0.1.
+		set throtki to 0.01.
+		set throtkd to 0.1.
+		
+		
+
+		// initialize vertical speed loop
+		set vskp to .3.
+		set vski to 0.
+		set vskd to 0.2.
+		
+
+		// initialize pitch angle loop
+		// this loop is mostly for fine-tuned adjustments to the vertical speed
+		// the heavy lifting of that is taken care of with an arcsin in the update_loops() funcion
+		// hence the kp of 0
+		set pitchangkp to 0.
+		set pitchangki to 0.0.
+		set pitchangkd to 0.3.
+		
+
+
+		// initialize roll control loop
+		set rollkp to 0.01.
+		set rollki to 0.0.
+		set rollkd to 0.02.
+		
+		
+		// initialize pitch control pid 
+		// different from the pitch angle pid, 
+		// this one actually controls the pitch control surfaces
+		set pitchkp to 0.03.
+		set pitchki to 0.002.
+		set pitchkd to 0.01.
+		
+
+		// initialize yaw control pid
+		set yawkp to 0.03.
+		set yawki to 0.0.
+		set yawkd to 0.005.
+		
+
+		// this will minimize sideslip
+		// since ki is 0, it has no way to "learn" what yaw control
+		// should be input to arrive at 0 sideslip angle
+		// this is intentional, as 
+		// a) we shouldn't need it and
+		// b) we don't want to interfere with the yaw control loop above
+		// (too much)
+		set sideslipkp to 0.1.
+		set sideslipki to 0.0.
+		set sideslipkd to 0.05.
+
+
+		set ship_lex to lexicon().
+
+		ship_lex:add("throtkp",throtkp).
+		ship_lex:add("throtki",throtki).
+		ship_lex:add("throtkd",throtkd).
+		
+		ship_lex:add("vskp",vskp).
+		ship_lex:add("vski",vski).
+		ship_lex:add("vskd",vskd).
+
+		ship_lex:add("pitchangkp",pitchangkp).
+		ship_lex:add("pitchangki",pitchangki).
+		ship_lex:add("pitchangkd",pitchangkd).
+
+		ship_lex:add("rollkp",rollkp).
+		ship_lex:add("rollki",rollki).
+		ship_lex:add("rollkd",rollkd).
+
+		ship_lex:add("pitchkp",pitchkp).
+		ship_lex:add("pitchki",pitchki).
+		ship_lex:add("pitchkd",pitchkd).
+
+		ship_lex:add("yawkp",yawkp).
+		ship_lex:add("yawki",yawki).
+		ship_lex:add("yawkd",yawkd).
+
+		ship_lex:add("sideslipkp",sideslipkp).
+		ship_lex:add("sideslipki",sideslipki).
+		ship_lex:add("sideslipkd",sideslipkd).
+
+		set lx to lexicon().
+		lx:add("default",ship_lex).
+		lx:add("default landing",ship_lex).
+		writeJson(lx,pid_setting_path).
+	}
 	set minthrot to 0.0.
 	set maxthrot to 1.0.
 	set throtpid to pidloop(throtkp, throtki, throtkd, minthrot, maxthrot).
@@ -24,65 +153,32 @@ function initialize {
 	set throt to 0.0.
 	lock throttle to throt.
 
-	// initialize vertical speed loop
-	set vskp to .3.
-	set vski to 0.
-	set vskd to 0.2.
 	set vspid to pidloop(vskp,vski,vskd,-vsmax,vsmax).
 	set vspid:setpoint to desalt.
 
-	// initialize pitch angle loop
-	// this loop is mostly for fine-tuned adjustments to the vertical speed
-	// the heavy lifting of that is taken care of with an arcsin in the update_loops() funcion
-	// hence the kp of 0
-	set pitchangkp to 0.
-	set pitchangki to 0.0.
-	set pitchangkd to 0.3.
 	set minpitchang to -3.
 	set maxpitchang to 10.
 	set pitchang to pidloop(pitchangkp, pitchangki, pitchangkd, minpitchang, maxpitchang).
 	set pitchang:setpoint to 0.
 
-
-	// initialize roll control loop
-	set rollkp to 0.01.
-	set rollki to 0.0.
-	set rollkd to 0.02.
 	set minroll to -1.
 	set maxroll to 1.
 	set rollcontrol to pidloop(rollkp, rollki, rollkd, minroll, maxroll).
 	set rollcontrol:setpoint to 0.
-	
-	// initialize pitch control pid 
-	// different from the pitch angle pid, 
-	// this one actually controls the pitch control surfaces
-	set pitchkp to 0.03.
-	set pitchki to 0.002.
-	set pitchkd to 0.01.
+
 	set minpitch to -0.5.
 	set maxpitch to 1.
 	set pitchcontrol to pidloop(pitchkp, pitchki, pitchkd, minpitch, maxpitch).
 
-	// initialize yaw control pid
-	set yawkp to 0.03.
-	set yawki to 0.0.
-	set yawkd to 0.005.
 	set minyaw to -1.
 	set maxyaw to 1.
 	set yawcontrol to pidloop(yawkp, yawki, yawkd, minyaw, maxyaw).
 	set yawtakeover to 3.
 
-	// this will minimize sideslip
-	// since ki is 0, it has no way to "learn" what yaw control
-	// should be input to arrive at 0 sideslip angle
-	// this is intentional, as 
-	// a) we shouldn't need it and
-	// b) we don't want to interfere with the yaw control loop above
-	// (too much)
-	set sideslipkp to 0.1.
-	set sideslipki to 0.0.
-	set sideslipkd to 0.05.
 	set sideslipcontrol to pidloop(sideslipkp, sideslipki, sideslipkd, minyaw, maxyaw).
+
+
+
 
 	// dampening control as we increase airspeed
 	// seen in the update_loops() function
@@ -138,8 +234,8 @@ function check_status {
 			toggle ag3.
 			wait 1.
 			toggle ag3.
-			wait 1.
-			toggle ag3.
+			// wait 1.
+			// toggle ag3.
 
 			brakes off.
 			sas off.
@@ -165,8 +261,8 @@ function check_status {
 			// lock throttle to 1.
 			
 			until ship:status = "flying" {
-				if airspeed > 50 {
-					set ship:control:pitch to .01*(airspeed-50).
+				if airspeed > 10 {
+					set ship:control:pitch to .01*(airspeed-10).
 				}
 				set wheelsteerpid:kp to .1/airspeed.
 				set throt to throtpid:update(time:seconds, airspeed).
@@ -204,8 +300,8 @@ function check_status {
 			toggle ag3.
 			wait 1.
 			toggle ag3.
-			wait 1.
-			toggle ag3.
+			// wait 1.
+			// toggle ag3.
 
 			brakes off.
 			sas off.
@@ -227,7 +323,7 @@ function check_status {
 			set desairspd to tempairspeed.
 			set pitchang:setpoint to desalt.
 			until ship:status = "flying" {
-				set ship:control:pitch to .01*airspeed.
+				set ship:control:pitch to .05*airspeed.
 				set wheelsteerpid:kp to .1/airspeed.
 				set ship:control:wheelsteer to wheelsteerpid:update(time:seconds, anglediff(compass_for(), deshead)).
 				// set throt to throtpid:update(time:seconds, airspeed).

@@ -30,6 +30,8 @@ set timetoapo to 30.
 set circtol to 1000.
 set currtwr to 1.
 
+copyPath("0:reaper.ks","reaper").
+
 main().
 
 function main {
@@ -57,9 +59,12 @@ function main {
 		ascention().
 		circularization().
 	}
-	if abs(apoapsis - desiredapo) < 1000 and abs(periapsis - peri) < 1000 {
+	if abs(apoapsis - desiredapo)/desiredapo < 0.01 and abs(periapsis - peri)/peri < .01 {
 		save_alt_pitchingairspeed().
 	}
+	print "turning off rcs control".
+	rcs off.
+	kuniverse:pause.
 }
 
 function save_alt_pitchingairspeed {
@@ -86,13 +91,13 @@ function save_alt_pitchingairspeed {
 		if l:haskey(ship:name) {
 			print "   " + ship:name + " found in lexicon".
 			// wait 1.
-			set l[ship:name] to "run orbit("+desiredapo/1000+","+inc+","+peri+","+pitchingairspeed+").".
+			set l[ship:name] to "run orbit("+desiredapo/1000+","+inc+","+peri/1000+","+pitchingairspeed+").".
 		} else {
 			print "   " + ship:name + " not found in lexicon".
 			// wait 1.
 			print "   adding to lexicon...".
 			// wait 1.
-			l:add(ship:name,"run orbit("+desiredapo/1000+","+inc+","+peri+","+pitchingairspeed+").").
+			l:add(ship:name,"run orbit("+desiredapo/1000+","+inc+","+peri/1000+","+pitchingairspeed+"(optional) ).").
 		}
 		print "  saving lexicon...".
 		// wait 1.
@@ -228,20 +233,27 @@ function roll_for {
 	}
 }
 
-function heading_bug {
+function prograde_pitch {
 	set prg_delta to 0.
+	set eta_apo_setpoint to 30.
+	if apoapsis > 70000 {
+		set eta_apo_setpoint to 10.
+	}
 	if altitude > 36000 {
 		set prgrd to prograde:vector.
-		if eta:apoapsis < 30 {
-			set prg_delta to 30 - eta:apoapsis.
+		if eta:apoapsis < eta_apo_setpoint {
+			set prg_delta to eta_apo_setpoint - eta:apoapsis.
 		} else if eta:apoapsis > eta:periapsis {
-			set prg_delta to 30.
+			set prg_delta to eta_apo_setpoint.
 		}
 	} else {
 		set prgrd to srfprograde:vector.
 	}
-	set prograde_pitch to max(pitch_for(prgrd),0) + prg_delta.
-	return heading(az, prograde_pitch, -90).
+	return max(pitch_for(prgrd),0) + prg_delta.
+}
+
+function heading_bug {
+	return heading(az, prograde_pitch(), -90).
 }
 
 function get_stage_thrust {
@@ -299,35 +311,67 @@ function ascention {
 	set throttpid to pidloop(Kp, Ki, Kd, min_thrott, max_thrott).
 
 	set throttpid:setpoint to 60.
+	if desiredapo >= 500000 {
+		set throttpid:setpoint to desiredapo/1000.
+	}
 	set mythrot to 1.0.
 	lock throttle to mythrot.
 
+	lock dynamic_desired_apo to desiredapo.
+
+	if ship:body:atm:exists {
+		when apoapsis > ship:body:atm:height then {
+			lock dynamic_desired_apo to (desiredapo-altitude)/2 + altitude.
+		}
+	}
+
+	set throttpid2 to pidloop(Kp, Ki, Kd, min_thrott, max_thrott).
+
+
 	until altitude > 50000 {
 		needstage().
-		set mythrot to throttpid:update(time:seconds, eta:apoapsis).
+		print "desired apo: " + dynamic_desired_apo.
+		set mythrot to min(throttpid:update(time:seconds, eta:apoapsis), throttpid2:update(time:seconds, (apoapsis-dynamic_desired_apo)/1000)).
 		if pitch_for() < 0 {
 			toggle abort.
 		}
 		wait 0.001.
 	}
+	if desiredapo >= 250000 {
+		set throttpid:setpoint to desiredapo/1000.
+	}
 	print "staging fairing on AG10.".
 	toggle ag10. // will stage the fairing
+	print "turning on RCS control".
+	rcs on.
 	until ship:dynamicpressure = 0 or apoapsis > desiredapo{
+		set mythrot to min(throttpid:update(time:seconds, eta:apoapsis), throttpid2:update(time:seconds, (apoapsis-dynamic_desired_apo)/1000)).
 		needstage().
-		set mythrot to throttpid:update(time:seconds, eta:apoapsis).
+		print "desired apo: " + dynamic_desired_apo.
 		wait 0.001.
 	}
+
+	
 
 	until apoapsis > desiredapo {
 		// set stagenum to stage:number.
 		needstage().
-		set mythrot to max(throttpid:update(time:seconds, eta:apoapsis),mythrot).
+		print "desired apo: " + dynamic_desired_apo.
+		set mythrot to max(min(throttpid:update(time:seconds, eta:apoapsis), throttpid2:update(time:seconds, (apoapsis-dynamic_desired_apo)/1000)),mythrot).
 		if pitch_for() < 0 {
 			force_exept().
 		}
 		wait 0.001.
 	}
 	lock throttle to 0.
+	if ship:dynamicpressure > 0{
+		set kuniverse:timewarp:mode to "physics".
+    	set kuniverse:timewarp:rate to 4.
+		wait until ship:dynamicpressure = 0.
+		set kuniverse:timewarp:rate to 0.
+		wait until kuniverse:timewarp:issettled.
+		set kuniverse:timewarp:mode to "RAILS".
+	}
 	// clearscreen.
 	print "MECO".
 }
@@ -349,7 +393,7 @@ function pitch {
 		wait 0.001.
 	}
 	lock steering to heading(az,90-pitchangle) + r(0,0,-90).
-	until time:seconds > start + 15 {
+	until prograde_pitch() < 85 {
 		needstage().
 		wait 0.001.
 	}
@@ -436,13 +480,6 @@ function circularization {
 	print "waiting for circularization.".
 	// kuniverse:timewarp:warpto(time:seconds + eta:apoapsis - 60).
 	wait until ship:dynamicpressure = 0.
-	until apoapsis > desiredapo {
-		needstage().
-		set mythrot to throttpid:update(time:seconds, eta:apoapsis).
-		wait 0.001.
-	}
-	lock throttle to 0.
-	circ_apo().
 	print "deploying deployables.".
 	toggle lights.
 	wait 1.
@@ -450,6 +487,29 @@ function circularization {
 	wait 3.
 	toggle ag8.
 	wait 1.
+	if apoapsis < desiredapo {
+		set Kp to 1.
+		set Ki to 0.01.
+		set Kd to 0.1.
+		set min_thrott to 0.07.
+		set max_thrott to 1.0.
+		set throttpid to pidloop(Kp, Ki, Kd, min_thrott, max_thrott).
+
+		set throttpid:setpoint to 60.
+		if desiredapo >= 250000 {
+			set throttpid:setpoint to desiredapo/1000.
+		}
+		set mythrot to 0.0.
+		lock throttle to mythrot.
+		until apoapsis > desiredapo {
+			needstage().
+			set mythrot to throttpid:update(time:seconds, eta:apoapsis).
+			wait 0.001.
+		}
+	}
+	lock throttle to 0.
+	circ_apo().
+	
 	print "beginning circularization.".
 	set nodedv to nextNode:burnvector:mag.
 	// until stage:deltav:current > nodedv/10 or stage:number = 0 {

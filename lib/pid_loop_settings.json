@@ -1,0 +1,713 @@
+{
+    "entries": [
+        {
+            "value": "default",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "entries": [
+                {
+                    "value": "throtkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.1,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "throtki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.01,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "throtkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.1,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "vskp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.3,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "vski",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "vskd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.2,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "pitchangkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "pitchangki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "pitchangkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.3,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "rollkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.01,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "rollki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "rollkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.02,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "pitchkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.03,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "pitchki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.002,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "pitchkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.01,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "yawkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.03,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "yawki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "yawkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.005,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "sideslipkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.1,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "sideslipki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "sideslipkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.05,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                }
+            ],
+            "$type": "kOS.Safe.Encapsulation.Lexicon"
+        },
+        {
+            "value": "default landing",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "entries": [
+                {
+                    "value": "throtkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.1,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "throtki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.01,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "throtkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.1,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "vskp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.3,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "vski",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "vskd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.2,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "pitchangkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "pitchangki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "pitchangkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.3,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "rollkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.01,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "rollki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "rollkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.02,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "pitchkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.01,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "pitchki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.002,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "pitchkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.01,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "yawkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.03,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "yawki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "yawkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.005,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "sideslipkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.1,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "sideslipki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "sideslipkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.05,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                }
+            ],
+            "$type": "kOS.Safe.Encapsulation.Lexicon"
+        },
+        {
+            "value": "Juno - 01 Albatross",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "entries": [
+                {
+                    "value": "throtkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.1,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "throtki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.01,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "throtkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.1,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "vskp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.3,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "vski",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "vskd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.2,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "pitchangkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "pitchangki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "pitchangkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.3,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "rollkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.01,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "rollki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "rollkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.02,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "pitchkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.02,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "pitchki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.002,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "pitchkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.01,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "yawkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.03,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "yawki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "yawkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.005,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "sideslipkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.1,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "sideslipki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "sideslipkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.05,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                }
+            ],
+            "$type": "kOS.Safe.Encapsulation.Lexicon"
+        },
+        {
+            "value": "Juno - 01 Albatross landing",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "entries": [
+                {
+                    "value": "throtkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.1,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "throtki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.01,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "throtkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.1,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "vskp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.3,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "vski",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "vskd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.01,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "pitchangkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "pitchangki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "pitchangkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.075,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "rollkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.01,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "rollki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "rollkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.02,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "pitchkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.005,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "pitchki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.002,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "pitchkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "yawkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.03,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "yawki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "yawkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.005,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "sideslipkp",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.1,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                },
+                {
+                    "value": "sideslipki",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0,
+                    "$type": "kOS.Safe.Encapsulation.ScalarIntValue"
+                },
+                {
+                    "value": "sideslipkd",
+                    "$type": "kOS.Safe.Encapsulation.StringValue"
+                },
+                {
+                    "value": 0.05,
+                    "$type": "kOS.Safe.Encapsulation.ScalarDoubleValue"
+                }
+            ],
+            "$type": "kOS.Safe.Encapsulation.Lexicon"
+        }
+    ],
+    "$type": "kOS.Safe.Encapsulation.Lexicon"
+}

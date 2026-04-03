@@ -13,16 +13,22 @@ function main {
 	}
 
 	burn_like_hell().
+	wait until verticalSpeed < 0.
+	lock steering to heading(90, 0, 0).
+	// wait until alt:radar < 1000.
 }
 
 function burn_like_hell {
 	set goon to true.
 	if not (h = "none") {
-		print "setting up apoapsis limit.".
-		when apoapsis > h then {
+		print "setting up apoapsis limit for " + (h/1000) + " km".
+		when apoapsis > h - 10000 then {
 			lock throttle to (h-apoapsis)/10000.
-			wait until altitude > 70000.
+			wait until verticalSpeed < 0.
 			set goon to false.
+			lock throttle to 0.
+			set ship:control:pilotmainthrottle to 0.
+			unlock throttle.
 			return.
 		}
 	}

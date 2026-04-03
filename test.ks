@@ -8,7 +8,7 @@ until stage:deltav:current > 0 or stage:number=0{
     wait until stage:ready.
     stage.
 }
-wait until altitude > 70000.
+wait until altitude > 70000 or verticalSpeed < 0.
 
 lock steering to heading(180,0).
 wait 5.

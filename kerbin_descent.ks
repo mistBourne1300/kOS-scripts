@@ -151,7 +151,7 @@ function main {
             if stage:number > 0 {
                 print "locking to normal vector".
                 lock steering to vcrs(prograde:vector,up:vector).
-                wait until vang(ship:facing:vector,vcrs(prograde:vector,up:vector)) < 1.
+                wait until (vang(ship:facing:vector,vcrs(prograde:vector,up:vector)) < 1) and (ship:angularvel:mag < 0.01).
             }
 
             set pred_time to get_time_to_alt(walt).
@@ -183,13 +183,13 @@ function main {
     print "locking to retrograde".
 
     lock steering to srfretrograde.
-    wait until vang(ship:facing:vector, srfRetrograde:vector) < 1.
+    wait until (vang(ship:facing:vector, srfRetrograde:vector) < 1) and (ship:angularvel:mag < 0.01).
     print "warping to atmosphere".
     kuniverse:timewarp:warpto(get_time_to_alt(ship:body:atm:height + 1*KM)).
 	
 	wait until altitude < ship:body:atm:height.
 	print "entered atmosphere. prepare for physics warp.".
-    wait until vang(ship:facing:vector, srfretrograde:vector)<5.
+    wait until (vang(ship:facing:vector, srfretrograde:vector)<5) and (ship:angularvel:mag < 0.01) .
 	set kuniverse:timewarp:mode to "physics".
     set kuniverse:timewarp:rate to 4.
 
@@ -242,6 +242,18 @@ function main {
             }
             set kuniverse:timewarp:rate to 4.
         }
+        if altitude > ship:body:atm:height and verticalSpeed > 0{
+            kuniverse:timewarp:cancelwarp.
+            wait until kuniverse:timewarp:issettled.
+            set kuniverse:timewarp:mode to "rails".
+            wait until altitude > ship:body:atm:height + .1*KM.
+            kuniverse:timewarp:warpto(get_time_to_alt(ship:body:atm:height + .1*KM)).
+            wait until kuniverse:timewarp:issettled.
+            wait until altitude < ship:body:atm:height.
+            set kuniverse:timewarp:mode to "physics".
+            set kuniverse:timewarp:rate to 4.
+        }
+
         wait 0.001.
     }
 

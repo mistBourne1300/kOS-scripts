@@ -23,6 +23,62 @@
         {
             "value": "run orbit(80,90,80000,45).",
             "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "Orbital Stayputnik",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "run orbit(80,0,80000,45).",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "Minmus QBE Flyby",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "run orbit(80,6,80,45).",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "QBE Satelite Bus",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "run orbit(7305,-8,6990,45(optional) ).",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "Data Acquisition Reentry Tube",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "run orbit(250,0,75,45).",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "OCTO ScanSat",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "run orbit(80,-6,80,45).",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "Jailbird - 01",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "run orbit(80,0,80,45).",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "Relay Constellation",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "run orbit(80,6,80,45).",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
         }
     ],
     "$type": "kOS.Safe.Encapsulation.Lexicon"

@@ -41,14 +41,14 @@ function reaper_main {
 	}
 	lock steering to mynode:deltav.
 	print "steering to burn vector".
-	wait until vang(ship:facing:vector, mynode:deltav) < 1.
+	wait until (vang(ship:facing:vector, mynode:deltav) < 1) and ((ship:angularvel:mag < 0.005) or (mynode:time - 10 - burn_time/2 > time:seconds)).
 	if dowarp = "w" {
 		if mynode:time - 300 - burn_time/2 > time:seconds {
 			kuniverse:timewarp:warpto(mynode:time - 300 - burn_time/2).
 			wait until kuniverse:timewarp:issettled.
 			wait until kuniverse:timewarp:rate = 1.
 			wait until kuniverse:timewarp:issettled.
-			wait until vang(ship:facing:vector, mynode:deltav) < 1.
+			wait until (vang(ship:facing:vector, mynode:deltav) < 1) and ((ship:angularvel:mag < 0.005) or (mynode:time - 60 - burn_time/2 > time:seconds)).
 			wait 1.
 		}
 
@@ -57,7 +57,7 @@ function reaper_main {
 			wait until kuniverse:timewarp:issettled.
 			wait until kuniverse:timewarp:rate = 1.
 			wait until kuniverse:timewarp:issettled.
-			wait until vang(ship:facing:vector, mynode:deltav) < 1.
+			wait until (vang(ship:facing:vector, mynode:deltav) < 1) and ((ship:angularvel:mag < 0.005) or (mynode:time - 10 - burn_time/2 > time:seconds)).
 			wait 1.
 		}
 		
@@ -66,7 +66,7 @@ function reaper_main {
 			wait until kuniverse:timewarp:issettled.
 			wait until kuniverse:timewarp:rate = 1.
 			wait until kuniverse:timewarp:issettled.
-			wait until vang(ship:facing:vector, mynode:deltav) < 1.
+			wait until (vang(ship:facing:vector, mynode:deltav) < 1).
 		}
 	}
 	execute().
