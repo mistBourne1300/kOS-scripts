@@ -1,6 +1,6 @@
 // will execute the next maneuver node
 // it cannot handle staging events, as the burn time calculation is too difficult.
-parameter dowarp is "n".
+parameter dowarp is "w".
 
 reaper_main().
 
@@ -38,35 +38,51 @@ function reaper_main {
 			wait until kuniverse:timewarp:rate = 1.
 			wait until kuniverse:timewarp:issettled.
 		}
+		// set kuniverse:timewarp:mode to "physics".
 	}
 	lock steering to mynode:deltav.
 	print "steering to burn vector".
 	wait until (vang(ship:facing:vector, mynode:deltav) < 1) and ((ship:angularvel:mag < 0.005) or (mynode:time - 10 - burn_time/2 > time:seconds)).
 	if dowarp = "w" {
-		if mynode:time - 300 - burn_time/2 > time:seconds {
+		if mynode:time - 310 - burn_time/2 > time:seconds {
 			kuniverse:timewarp:warpto(mynode:time - 300 - burn_time/2).
 			wait until kuniverse:timewarp:issettled.
 			wait until kuniverse:timewarp:rate = 1.
 			wait until kuniverse:timewarp:issettled.
 			wait until (vang(ship:facing:vector, mynode:deltav) < 1) and ((ship:angularvel:mag < 0.005) or (mynode:time - 60 - burn_time/2 > time:seconds)).
 			wait 1.
+
+			// set kuniverse:timewarp:mode to "physics".
+			// set kuniverse:timewarp:rate to 4.
+			// wait until mynode:time - 300 - burn_time/2 > time:seconds.
+			// set kuniverse:timewarp:rate to 1.
 		}
 
-		if mynode:time - 60 - burn_time/2 > time:seconds {
+		if mynode:time - 70 - burn_time/2 > time:seconds {
 			kuniverse:timewarp:warpto(mynode:time - 60 - burn_time/2).
 			wait until kuniverse:timewarp:issettled.
 			wait until kuniverse:timewarp:rate = 1.
 			wait until kuniverse:timewarp:issettled.
 			wait until (vang(ship:facing:vector, mynode:deltav) < 1) and ((ship:angularvel:mag < 0.005) or (mynode:time - 10 - burn_time/2 > time:seconds)).
 			wait 1.
+
+			// set kuniverse:timewarp:mode to "physics".
+			// set kuniverse:timewarp:rate to 4.
+			// wait until mynode:time - 61 - burn_time/2 > time:seconds.
+			// set kuniverse:timewarp:rate to 1.
 		}
 		
-		if mynode:time - 10 - burn_time/2 > time:seconds {
-			kuniverse:timewarp:warpto(mynode:time - 10 - burn_time/2).
-			wait until kuniverse:timewarp:issettled.
-			wait until kuniverse:timewarp:rate = 1.
-			wait until kuniverse:timewarp:issettled.
-			wait until (vang(ship:facing:vector, mynode:deltav) < 1).
+		if mynode:time - 20 - burn_time/2 > time:seconds {
+			// kuniverse:timewarp:warpto(mynode:time - 10 - burn_time/2).
+			// wait until kuniverse:timewarp:issettled.
+			// wait until kuniverse:timewarp:rate = 1.
+			// wait until kuniverse:timewarp:issettled.
+			// wait until (vang(ship:facing:vector, mynode:deltav) < 1).
+
+			set kuniverse:timewarp:mode to "physics".
+			set kuniverse:timewarp:rate to 4.
+			wait until mynode:time - 11 - burn_time/2 < time:seconds.
+			set kuniverse:timewarp:rate to 1.
 		}
 	}
 	execute().

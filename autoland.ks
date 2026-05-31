@@ -247,11 +247,10 @@ function autoland_main {
         wait 0.001.
     }
     brakes off.
+    // set landdesairspd to stallspeed.
 
     gear on.
     
-    // TODO: test this code that slowly lowers 
-    // the landing altitude over 5 (for now) seconds.
     set loop_start_time to time:seconds.
     set loop_total_time to 5.
     set starting_desalt to landdesalt.

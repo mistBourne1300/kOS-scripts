@@ -242,9 +242,9 @@ function prograde_pitch {
 	if altitude > 36000 {
 		set prgrd to prograde:vector.
 		if eta:apoapsis < eta_apo_setpoint {
-			set prg_delta to eta_apo_setpoint - eta:apoapsis.
+			set prg_delta to (eta_apo_setpoint - eta:apoapsis)*(90/eta_apo_setpoint).
 		} else if eta:apoapsis > eta:periapsis {
-			set prg_delta to eta_apo_setpoint.
+			set prg_delta to 90.
 		}
 	} else {
 		set prgrd to srfprograde:vector.
@@ -253,6 +253,9 @@ function prograde_pitch {
 }
 
 function heading_bug {
+	if abs(orbit:inclination - inc) < .1 {
+		set az to 90-inc.
+	}
 	return heading(az, prograde_pitch(), -90).
 }
 
@@ -332,20 +335,22 @@ function ascention {
 		needstage().
 		print "desired apo: " + dynamic_desired_apo.
 		set mythrot to min(throttpid:update(time:seconds, eta:apoapsis), throttpid2:update(time:seconds, (apoapsis-dynamic_desired_apo)/1000)).
+		// set mythrot to throttpid2:update(time:seconds, (apoapsis-dynamic_desired_apo)/1000).
 		if pitch_for() < 0 {
 			toggle abort.
 		}
 		wait 0.001.
 	}
-	if desiredapo >= 250000 {
-		set throttpid:setpoint to desiredapo/1000.
-	}
+	// if desiredapo >= 250000 {
+	// 	set throttpid:setpoint to desiredapo/1000.
+	// }
 	print "staging fairing on AG10.".
 	toggle ag10. // will stage the fairing
 	print "turning on RCS control".
 	rcs on.
 	until ship:dynamicpressure = 0 or apoapsis > desiredapo{
 		set mythrot to min(throttpid:update(time:seconds, eta:apoapsis), throttpid2:update(time:seconds, (apoapsis-dynamic_desired_apo)/1000)).
+		// set mythrot to throttpid2:update(time:seconds, (apoapsis-dynamic_desired_apo)/1000).
 		needstage().
 		print "desired apo: " + dynamic_desired_apo.
 		wait 0.001.
@@ -357,10 +362,11 @@ function ascention {
 		// set stagenum to stage:number.
 		needstage().
 		print "desired apo: " + dynamic_desired_apo.
-		set mythrot to max(min(throttpid:update(time:seconds, eta:apoapsis), throttpid2:update(time:seconds, (apoapsis-dynamic_desired_apo)/1000)),mythrot).
-		if pitch_for() < 0 {
-			force_exept().
-		}
+		// set mythrot to max(min(throttpid:update(time:seconds, eta:apoapsis), throttpid2:update(time:seconds, (apoapsis-dynamic_desired_apo)/1000)),mythrot).
+		set mythrot to throttpid2:update(time:seconds, (apoapsis-dynamic_desired_apo)/1000).
+		// if pitch_for() < 0 {
+		// 	force_exept().
+		// }
 		wait 0.001.
 	}
 	lock throttle to 0.

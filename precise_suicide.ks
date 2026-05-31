@@ -1,6 +1,6 @@
 set bnd to ship:bounds.
 set do_landing to False.
-main().
+ps_main().
 
 function has_waypoint {
 	for wp in allwaypoints() {
@@ -27,6 +27,8 @@ function get_stage_thrust {
 }
 
 function burn_height {
+    // TODO: change to use trajectories (if available) and find the impact speed.
+
     local radial_height is altitude+body:radius.
     local gravity is ship:mass*body:mu/(radial_height^2).
     local drag is addons:far:aeroforce:mag.
@@ -90,8 +92,7 @@ function touchdown {
 	return max((-verticalSpeed-1-(radaralt/10)),.01).
 }
 
-function main {
-
+function ps_main {
     if not addons:tr:available {
         print "trajectories not found.".
         wait 1.
@@ -127,6 +128,7 @@ function main {
         print "liftoff.".
         wait until airspeed > 10.
         wait until eta:apoapsis > 60.
+        wait until apoapsis > 75000.
     }
     lock throttle to 0.
     print "waiting until vertical speed < 0".
@@ -158,7 +160,7 @@ function main {
     set fall_pitch_min to 0.
     set fall_pitch_pid to pidLoop(fall_pitchkp, fall_pitchki, fall_pitchkd, fall_pitch_max, fall_pitch_min).
     set edb to burn_height().
-    set brakes_alt to 1000.
+    set brakes_alt to 70000.
 
     function fall_w_style {
         // get angle to waypoint
@@ -169,24 +171,24 @@ function main {
         if vdot(ground_vel_vec,ground_proj_vec) < 0 { // somehow this is flipping the calculations when it shouldn't be
             set gs to -1*gs.
         }
-        print "needed_horiz_speed:" + needed_horiz_speed.
-        print "actual relative groundspeed: " + gs.
-        print "error: " + (needed_horiz_speed - gs).
+        // print "needed_horiz_speed:" + needed_horiz_speed.
+        // print "actual relative groundspeed: " + gs.
+        // print "error: " + (needed_horiz_speed - gs).
         local pitch_correct to fall_pitch_pid:update(time:seconds,needed_horiz_speed-gs).
+        if abs(pitch_correct) > 15 {
+            set pitch_correct to 15*pitch_correct/abs(pitch_correct).
+        }
         return heading(wp:geoPosition:heading,90+pitch_correct).
     }
     lock steering to fall_w_style().
     lock throttle to 0.
     set ship:control:pilotmainthrottle to 0.
 
-    when stage:deltav:current <= 0.0 and stage:ready and stage:number > 0 then{
-        stage.
-        return true.
-    }
+    
 
     lock tti to -bnd:bottomaltradar/verticalSpeed.
     set edb to burn_height().
-    until edb < brakes_alt and alt:radar < 5000 {
+    until edb < brakes_alt {
         print "est. dist to burn: " + edb.
         print "est. time to impact: " + tti.
         print "ground_dist: " + ground_dist.
@@ -195,6 +197,14 @@ function main {
         clearscreen.
     }
     brakes on.
+    until alt:radar < 5000 {
+        print "est. dist to burn: " + edb.
+        print "est. time to impact: " + tti.
+        print "ground_dist: " + ground_dist.
+        wait 0.001.
+        set edb to burn_height().
+        clearscreen.
+    }
     until verticalSpeed < 0 and edb - .002*verticalSpeed < 0{
         print "est. dist to burn: " + edb.
         print "est. time to impact: " + tti.
@@ -205,10 +215,18 @@ function main {
     set bnd to ship:bounds.
     lock steering to up.
     lock throttle to 1.
-    until verticalSpeed > -1 {
+    until verticalSpeed > -1*alt:radar/50 {
         clearScreen.
         print "est. time to impact: " + tti.
         wait 0.001.
+        if stage:deltav:current <= 0.0 and stage:ready and stage:number > 0 {
+            stage.
+        }
+    }
+    when stage:deltav:current <= 0.0 and stage:ready and stage:number > 0 then{
+        stage.
+        limit_twr().
+        return true.
     }
     gear on.
     limit_twr().
@@ -250,14 +268,20 @@ function main {
 
         if ground_dist > 10 or groundspeed > 1 {
             set radaralt to radaralt - 50.
-        } else if radaralt < 0{
+        } else if radaralt < 0 {
             set radaralt to 0.
         }
+        if stage:deltav:current < 300 and groundspeed < 1 {
+            set radaralt to 0.
+        }
+        // if groundspeed > 50 {
+        //     set pitch_setpoint to 0.
+        // }
 
         lock throttle to max((-verticalSpeed-1-(radaralt/10)),.01).
 
         if ground_dist > 1000 {
-            set pitchsetpoint to ground_dist/5.
+            set pitchsetpoint to min(50,ground_dist/5).
         } else if ground_dist > 50 {
             set pitchsetpoint to ground_dist/15.
         } else if ground_dist > 10 {

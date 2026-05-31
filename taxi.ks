@@ -17,7 +17,7 @@ function main {
 
     list engines in engs.
 
-    set yawkp to .1/despeed.
+    set yawkp to .1/(despeed+abs(max_error)).
 	set yawki to 0.
 	set yawkd to 0.
 	set minyaw to -1.
@@ -56,7 +56,7 @@ function has_waypoint {
 	for wp in allwaypoints() {
 		if wp:isselected() {
 			set vectowp to wp:position - ship:position.
-			if vectowp:mag < 10 {
+			if airspeed/vectowp:mag < 30 {
 				set ship:control:neutralize to true.
 				brakes on.
 				sas on.
@@ -132,7 +132,7 @@ function test_flameout {
 			}
 			set despeed to newspeed:tonumber(despeed).
 			set throtpid:setpoint to despeed.
-			set yawcontrol:kp to .1/despeed.
+			set yawcontrol:kp to .1/(despeed+abs(max_error)).
 		} else if c = "h" {
 			print "set desired heading:".
 			set c to terminal:input:getchar().
@@ -146,6 +146,19 @@ function test_flameout {
 			}
 			set head to abs(mod(newhead:tonumber(head),360)).
 			// the ang dist function will be able to read this and adjust accordingly.
+		} else if c="e" {
+			print "set max error:".
+			set c to terminal:input:getchar().
+			set newerror to "".
+			until c = terminal:input:return {
+				set newerror to newerror + c.
+                print "set desired head:".
+				print newerror.
+				set c to terminal:input:getchar().
+				clearscreen.
+			}
+			set max_error to newerror:tonumber.
+			set yawcontrol:kp to .1/(despeed+abs(max_error)).
 		}
 		
 		// if exists("0:autopilot_log.csv") {
@@ -174,4 +187,5 @@ function printinfo {
 	clearscreen.
 	print "heading: " + round(head).
 	print "speed: " + despeed.
+	print "max error: " + max_error.
 }

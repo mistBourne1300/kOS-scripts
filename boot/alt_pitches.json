@@ -79,6 +79,110 @@
         {
             "value": "run orbit(80,6,80,45).",
             "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "Apex (High Space Experiment Return)",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "run orbit(80,0,80,45).",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "Manned Materials Study",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "run orbit(300,0,80,45).",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "Unmanned Simple Orbit",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "run orbit(80,0,80,45(optional) ).",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "Duuuuuna 1",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "run orbit(100,0,100,45).",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "North Polar Manned Trip",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "run orbit(75,-90,75,45).",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "Materials Study Mun Return",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "run orbit(80,0,80,45).",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "Materials Study Minmus Return 2",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "run orbit(80,6,80,45(optional) ).",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "Kerbin ScanSat LoRes",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "run orbit(300,90,300,45).",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "Mun ScanSat LoRes",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "run orbit(80,0,80,45).",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "Minmus ScanSat LoRes",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "run orbit(80,-6,80,45(optional) ).",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "GoodNITE",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "run orbit(80,6,80,45).",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "Easter Bunny",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "run orbit(80,6,80,45).",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "Mun GoodNITE",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "run orbit(80,0,80,45(optional) ).",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
         }
     ],
     "$type": "kOS.Safe.Encapsulation.Lexicon"

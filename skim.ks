@@ -58,7 +58,7 @@ function main {
     print "performing skim maneuver...".
     if ship:apoapsis > body:atm:height {
         lock steering to retrograde.
-        runPath("circularization.ks","peri").
+        runPath("0:circularization.ks","peri").
         set oldnode to nextNode.
         print "warping to node.".
         set kuniverse:timewarp:warp to 3.
@@ -116,11 +116,12 @@ function main {
     lock throttle to 0.
     until stage:number = 0 {if stage:ready {stage.}}
     lock steering to srfRetrograde.
-    wait until airspeed < 1500.
+    // wait until airspeed < 1500.
+    unlock all.
     sas on.
-    set sasmode to "retrograde".
+    // set sasmode to "retrograde".
     set ship:control:pilotmainthrottle to 0.
-    runoncepath("kerbin_descent").
+    runoncepath("0:kerbin_descent").
 }
 
 main().

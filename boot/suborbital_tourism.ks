@@ -1,4 +1,4 @@
 if kuniverse:activevessel = ship {
     core:part:getmodule("kOSProcessor"):doevent("Open Terminal").
 }
-copypath("0:vtol.ks","vtol").
+copypath("0:subtour.ks","subtour").

@@ -274,7 +274,10 @@ function check_status {
 				wait 0.001.
 			}
 			lock throttle to throt.
-			toggle gear.
+			local temppitch to pitch_for()+1.
+			set ship:control:neutralize to true.
+			lock steering to heading(90,temppitch).
+			
 			until alt:radar > 50 {
 				set throt to throtpid:update(time:seconds, airspeed).
 				// set angle to pitchang:update(time:seconds, altitude).
@@ -282,9 +285,9 @@ function check_status {
 				// set ship:control:pitch to pitchcontrol:update(time:seconds, curpitch).
 				wait 0.001.
 			}
-			set ship:control:neutralize to true.
-			lock throttle to throt.
-			sas on.
+			toggle gear.
+			// set ship:control:neutralize to true.
+			// sas on.
 			toggle ag2.
 			wait 0.5.
 			toggle ag2.
@@ -332,8 +335,11 @@ function check_status {
 				// set ship:control:pitch to pitchcontrol:update(time:seconds, curpitch).
 				wait 0.001.
 			}
+			lock throttle to throt.
+			local temppitch to pitch_for()+1.
+			set ship:control:neutralize to true.
+			lock steering to heading(deshead,temppitch).
 			printinfo().
-			toggle gear.
 			until alt:radar > 50 {
 				// set throt to throtpid:update(time:seconds, airspeed).
 				// set angle to pitchang:update(time:seconds, altitude).
@@ -341,10 +347,9 @@ function check_status {
 				// set ship:control:pitch to pitchcontrol:update(time:seconds, curpitch).
 				wait 0.001.
 			}
-			
-			set ship:control:neutralize to true.
-			lock throttle to throt.
-			sas on.
+			toggle gear.
+			// set ship:control:neutralize to true.
+			// sas on.
 			toggle ag2.
 			wait 0.5.
 			toggle ag2.

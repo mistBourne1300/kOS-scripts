@@ -1,4 +1,4 @@
-parameter desiredperi.
+parameter desiredperi is 25000.
 
 main().
 
