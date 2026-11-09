@@ -78,11 +78,18 @@ function reaper_main {
 			// wait until kuniverse:timewarp:rate = 1.
 			// wait until kuniverse:timewarp:issettled.
 			// wait until (vang(ship:facing:vector, mynode:deltav) < 1).
-
+			unlock steering.
+			wait 1.
+			sas on.
+			wait 1.
 			set kuniverse:timewarp:mode to "physics".
 			set kuniverse:timewarp:rate to 4.
 			wait until mynode:time - 11 - burn_time/2 < time:seconds.
 			set kuniverse:timewarp:rate to 1.
+			wait until kuniverse:timewarp:issettled.
+			sas off.
+			wait 1.
+			lock steering to mynode:deltav.
 		}
 	}
 	execute().

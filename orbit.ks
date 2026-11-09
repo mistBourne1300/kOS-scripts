@@ -320,11 +320,13 @@ function ascention {
 	set mythrot to 1.0.
 	lock throttle to mythrot.
 
-	lock dynamic_desired_apo to desiredapo.
+	set dynamic_desired_apo to desiredapo.
+	set update_dyn_des_apo to false.
 
 	if ship:body:atm:exists {
 		when apoapsis > ship:body:atm:height then {
-			lock dynamic_desired_apo to (desiredapo-altitude)/2 + altitude.
+			
+			set update_dyn_des_apo to true.
 		}
 	}
 
@@ -333,6 +335,9 @@ function ascention {
 
 	until altitude > 50000 {
 		needstage().
+		if update_dyn_des_apo {
+			set dynamic_desired_apo to (desiredapo-altitude)/2 + altitude.
+		}
 		print "desired apo: " + dynamic_desired_apo.
 		set mythrot to min(throttpid:update(time:seconds, eta:apoapsis), throttpid2:update(time:seconds, (apoapsis-dynamic_desired_apo)/1000)).
 		// set mythrot to throttpid2:update(time:seconds, (apoapsis-dynamic_desired_apo)/1000).
@@ -349,6 +354,7 @@ function ascention {
 	print "turning on RCS control".
 	rcs on.
 	until ship:dynamicpressure = 0 or apoapsis > desiredapo{
+		set dynamic_desired_apo to (desiredapo-altitude)/2 + altitude.
 		set mythrot to min(throttpid:update(time:seconds, eta:apoapsis), throttpid2:update(time:seconds, (apoapsis-dynamic_desired_apo)/1000)).
 		// set mythrot to throttpid2:update(time:seconds, (apoapsis-dynamic_desired_apo)/1000).
 		needstage().
@@ -361,6 +367,7 @@ function ascention {
 	until apoapsis > desiredapo {
 		// set stagenum to stage:number.
 		needstage().
+		set dynamic_desired_apo to (desiredapo-altitude)/2 + altitude.
 		print "desired apo: " + dynamic_desired_apo.
 		// set mythrot to max(min(throttpid:update(time:seconds, eta:apoapsis), throttpid2:update(time:seconds, (apoapsis-dynamic_desired_apo)/1000)),mythrot).
 		set mythrot to throttpid2:update(time:seconds, (apoapsis-dynamic_desired_apo)/1000).

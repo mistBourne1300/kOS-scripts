@@ -183,6 +183,22 @@
         {
             "value": "run orbit(80,0,80,45(optional) ).",
             "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "ScanSat Hi Res",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "run orbit(80,-6,80,45).",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "Friendship 1",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "run orbit(80,0,80,45).",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
         }
     ],
     "$type": "kOS.Safe.Encapsulation.Lexicon"

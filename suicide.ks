@@ -156,7 +156,7 @@ function time_cancel_speed {
 function suicide_main {
     sas off.
     lock steering to srfretrograde.
-    wait until vang(ship:facing:vector, ship:srfretrograde:vector) < 1.
+    // wait until vang(ship:facing:vector, ship:srfretrograde:vector) < 1.
     print "calculating time to impact (toi)".
     set toi to get_time_of_impact().
 
