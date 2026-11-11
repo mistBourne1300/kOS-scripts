@@ -199,6 +199,14 @@
         {
             "value": "run orbit(80,0,80,45).",
             "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "Interplanetary Orbiter",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
+        },
+        {
+            "value": "run orbit(80,0,80,45).",
+            "$type": "kOS.Safe.Encapsulation.StringValue"
         }
     ],
     "$type": "kOS.Safe.Encapsulation.Lexicon"

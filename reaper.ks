@@ -18,7 +18,9 @@ function reaper_main {
 	}
 	set mynode to nextnode.
 	set burn_time to calculate_burn_time().
-	set start_burn_at to 0.
+	if burn_time < 10 {
+		reaper_adjust_throttle(burn_time/10).
+	}
 	if stage:deltav:current < mynode:deltav:mag {
 		print "cannot perform maneuver on current stage".
 		print "you'll have to control the throttle yourself".
@@ -93,6 +95,7 @@ function reaper_main {
 		}
 	}
 	execute().
+	reaper_adjust_throttle().
 	sas on.
 }
 
@@ -107,6 +110,17 @@ function get_stage_ISP {
 		}
 	}
 	return numer/denom.
+}
+
+function reaper_adjust_throttle {
+	parameter desiredthrottle is 1.
+	
+    list engines in engs.
+    for eng in engs {
+        if eng:ignition {
+            set eng:thrustlimit to desiredthrottle*100.
+        }
+    }
 }
 
 function get_stage_thrust_reaper {
