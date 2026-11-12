@@ -21,6 +21,7 @@ function reaper_main {
 	if burn_time < 10 {
 		reaper_adjust_throttle(burn_time/10).
 	}
+	set burn_time to calculate_burn_time().
 	if stage:deltav:current < mynode:deltav:mag {
 		print "cannot perform maneuver on current stage".
 		print "you'll have to control the throttle yourself".
