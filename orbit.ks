@@ -255,7 +255,7 @@ function prograde_pitch {
 function heading_bug {
 	if abs(orbit:inclination - inc) < .1 {
 		set az to 90-inc.
-	}
+	} // TODO: this breaks when passing over the north/south pole during a long launch.
 	return heading(az, prograde_pitch(), -90).
 }
 
@@ -362,12 +362,21 @@ function ascention {
 		wait 0.001.
 	}
 
+	// TODO: instead of this, start the burn ramp-up at 50k?
+	set alpha0 to altitude.
+	set p0 to (apoapsis - alpha0)/(desiredapo - alpha0).
+	set m to (1-p0)/(desiredapo - alpha0).
+	set addition_constant to p0 - m*alpha0.
+
+
+
 	
 
 	until apoapsis > desiredapo {
 		// set stagenum to stage:number.
 		needstage().
-		set dynamic_desired_apo to (desiredapo-altitude)/2 + altitude.
+		set palpha to m*altitude + addition_constant.
+		set dynamic_desired_apo to desiredapo*palpha + (1-palpha)*altitude.
 		print "desired apo: " + dynamic_desired_apo.
 		// set mythrot to max(min(throttpid:update(time:seconds, eta:apoapsis), throttpid2:update(time:seconds, (apoapsis-dynamic_desired_apo)/1000)),mythrot).
 		set mythrot to throttpid2:update(time:seconds, (apoapsis-dynamic_desired_apo)/1000).
